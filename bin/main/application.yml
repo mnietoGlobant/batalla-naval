@@ -1,0 +1,14 @@
+spring:
+ application:
+  name : batalla-naval
+
+logging:
+ level:
+  io:
+   axoniq:
+    demo : debug
+
+axon:
+ axonserver:
+  servers : ${vcap.services.AxonServer.credentials.uri:localhost}
+

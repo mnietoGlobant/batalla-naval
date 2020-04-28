@@ -15,9 +15,9 @@ public class JuegoRouterConfiguration {
     @Bean
     public RouterFunction<ServerResponse> route(JuegoApi handler) {
         return RouterFunctions
-                .route(RequestPredicates.GET("/crearArena").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::crearArena)
-				.andRoute(RequestPredicates.GET("/crearBarco").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::crearBarco)
-                .andRoute(RequestPredicates.GET("/disparar").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::disparar);
+                .route(RequestPredicates.POST("/arenas").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::crearArena)
+				.andRoute(RequestPredicates.POST("arenas/{id}/barcos").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::crearBarco)
+                .andRoute(RequestPredicates.POST("arenas/{id}/barcos/{barcoId}/disparar").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::disparar);
     }
 
 }

@@ -7,26 +7,31 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 public class JuegoHarness {
 
     private WebClient client = WebClient.create("http://localhost:8080");
 
-    private Mono<ClientResponse> result = client.get()
-            .uri("/crearArena")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange();
-
-    private Mono<ClientResponse> crearBarco = client.get()
-            .uri("/crearBarco")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange();
-
-    private Mono<ClientResponse> resultDisparo = client.get()
-            .uri("/disparar")
+    private Mono<ClientResponse> result = client.post()
+            .uri("/arenas")
+            .bodyValue("")
             .accept(MediaType.APPLICATION_JSON)
             .exchange();
 
     public String getResult() {
-        return ">> result = " + result.flatMap(res -> res.bodyToMono(Arena.class)).block() +crearBarco.block().rawStatusCode()+ resultDisparo.block().rawStatusCode();
+        Arena arena = result.flatMap(res -> res.bodyToMono(Arena.class)).block();
+        Mono<ClientResponse> crearBarco = client.post()
+                .uri("arenas/{id}/barcos", arena.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange();
+
+        Mono<ClientResponse> resultDisparo = client.post()
+                .uri("arenas/{id}/barcos/{barcoId}/disparar", arena.getId(),arena.getId())
+
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange();
+        
+        return ">> result = " +  +crearBarco.block().rawStatusCode()+ resultDisparo.block().rawStatusCode();
     }
 }

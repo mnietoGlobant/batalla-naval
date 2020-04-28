@@ -21,7 +21,7 @@ import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 public class JuegoApi {
 
     public static List<UUID> id = new ArrayList<>();
-    static UUID arenaId;
+
     private final CommandGateway commandGateway;
 
     public JuegoApi(CommandGateway commandGateway) {
@@ -29,21 +29,24 @@ public class JuegoApi {
     }
 
     public Mono<ServerResponse> crearBarco(ServerRequest request) {
-        UUID id = commandGateway.sendAndWait(new CrearBarco(arenaId, new Point(1, 3)));
+        String id = request.pathVariable("id");
+        UUID res = commandGateway.sendAndWait(new CrearBarco(UUID.fromString(id), new Point(1, 3)));
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(fromValue(new Barco(id, new Point(1, 2))));
+                .body(fromValue(res));
     }
 
 
     public Mono<ServerResponse> crearArena(ServerRequest request) {
-        arenaId = commandGateway.sendAndWait(new CrearArena(UUID.randomUUID()));
+        UUID arenaId = commandGateway.sendAndWait(new CrearArena(UUID.randomUUID()));
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(fromValue(new Arena(arenaId)));
     }
 
     public Mono<ServerResponse> disparar(ServerRequest request) {
-        commandGateway.sendAndWait(new Disparar(arenaId,UUID.randomUUID(), new Point(2, 30)));
-        return ServerResponse.ok().build();
+        String id = request.pathVariable("id");
+        UUID res = commandGateway.sendAndWait(new Disparar(UUID.fromString(id), UUID.randomUUID(), new Point(2, 30)));
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(fromValue(res));
     }
 
     @EventSourcingHandler

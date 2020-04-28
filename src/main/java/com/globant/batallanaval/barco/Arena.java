@@ -21,7 +21,6 @@ public class Arena {
     @AggregateMember
     private List<Barco> barcos = new ArrayList<>();
 
-    private UUID arenaId;
 
     public Arena() {
     }
@@ -32,8 +31,7 @@ public class Arena {
     }
 
     public Arena(UUID arenaId) {
-
-        this.arenaId = arenaId;
+        this.id = arenaId;
     }
 
     public UUID getId() {
@@ -51,8 +49,9 @@ public class Arena {
     }
 
     @CommandHandler
-    public void on(Disparar cmd) {
+    public UUID on(Disparar cmd) {
         AggregateLifecycle.apply(new ProyectilDisparado(cmd.barcoId(), cmd.point()));
+        return cmd.arenaId();
     }
 
     @EventSourcingHandler

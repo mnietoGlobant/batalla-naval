@@ -4,8 +4,7 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import java.util.UUID;
 
-record Hundido(
-        @TargetAggregateIdentifier
+public record Hundido(
         UUID barcoId,
         UUID barcoEnemigoId) {
 

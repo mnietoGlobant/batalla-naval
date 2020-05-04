@@ -35,4 +35,3 @@ dependencies {
     testImplementation 'org.axonframework:axon-test:4.3.2'
     testImplementation 'junit:junit:4.12'
 }
-

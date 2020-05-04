@@ -12,6 +12,17 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs += "--enable-preview"
+}
+
+tasks.withType(Test) {
+    jvmArgs += "--enable-preview"
+}
+
+tasks.withType(JavaExec) {
+    jvmArgs += '--enable-preview'
+}
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.axonframework:axon-spring-boot-starter:4.3.2'
@@ -22,8 +33,5 @@ dependencies {
     }
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.axonframework:axon-test:4.3.2'
-}
-
-test {
-    useJUnitPlatform()
+    testImplementation 'junit:junit:4.12'
 }
